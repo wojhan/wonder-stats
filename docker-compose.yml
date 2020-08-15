@@ -1,0 +1,29 @@
+version: "3.3"
+
+services:
+  django:
+    build: .
+#    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./:/usr/src/app/
+    ports:
+      - 8000:8000
+      - 4444:4444
+      - 8265:8265
+    env_file:
+      - ./.django-env-dev
+    depends_on:
+      - db
+    stdin_open: true
+    tty: true
+  db:
+    image: postgres:12.0-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.postgres-env
+
+volumes:
+  postgres_data:
